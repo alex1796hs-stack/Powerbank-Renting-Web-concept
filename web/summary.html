@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharenergy - Resumen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <body>
+    <div class="card-container">
+        <div class="check-wrapper">
+            <div class="check-icon">✔</div>
+        </div>
+
+        <h1>¡Gracias!</h1>
+        <p class="subtitle">Tu devolución ha sido confirmada.</p>
+
+        <div id="resultado-texto">Procesando datos del alquiler...</div>
+
+        <button class="btn-terminar" onclick="terminar()">
+            Volver al Inicio
+        </button>
+    </div>
+
+    <script>
+   
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const info = urlParams.get('info');
+            if (info) {
+                document.getElementById("resultado-texto").innerText = info;
+            } else {
+                document.getElementById("resultado-texto").innerText = "Transacción finalizada correctamente.";
+            }
+        }
+        function terminar() {
+            window.location.href = "index.html";
+        }
+    </script>
+    <style>
+        :root {
+            --color-primary: #008f39;
+            --color-accent: #FFD700; 
+            --color-text: #2D3E50;
+            --radius-card: 24px;
+            --radius-btn: 50px;
+        }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #f9fbe7 0%, #f4f7f6 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--color-text);
+        }
+
+        .card-container {
+            background: white;
+            padding: 50px 30px;
+            border-radius: var(--radius-card);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .check-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 143, 57, 0.3);
+        }
+        .check-icon { 
+            font-size: 50px; 
+            color: white; 
+        }
+        
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; color: var(--color-primary); }
+        p.subtitle { color: #7F8C8D; margin-bottom: 30px; font-size: 16px;}
+
+        #resultado-texto {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 40px 0;
+            padding: 25px;
+            background-color: #f0f9f4; 
+            border-radius: 15px;
+            border: 2px solid rgba(0, 143, 57, 0.1);
+            line-height: 1.5;
+        }
+
+        .btn-terminar {
+            background-color: var(--color-accent);
+            color: var(--color-text); 
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-terminar:hover {
+            background-color: #e6c200;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</body>
+</html>

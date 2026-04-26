@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharenergy - Ocupado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+   
+</head>
+<body>
+
+    <div class="card">
+        <span class="icon-sad">😓</span>
+        <h1>¡Lo sentimos!</h1>
+        <p>Todos nuestros dispositivos están en uso o recargándose en este momento.</p>
+        <p style="font-size: 14px; color: #aaa;">Por favor, inténtalo de nuevo en unos minutos.</p>
+
+        <button onclick="volver()">Volver al Inicio</button>
+    </div>
+
+    <script>
+        function volver() {
+            window.location.href = "index.html";
+        }
+    </script>
+     <style>
+    :root {
+        --color-primary: #008f39;
+        --color-text: #2D3E50;
+        --color-bg: #F4F7F6;
+    }
+
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background: var(--color-bg); 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        height: 100vh; 
+        margin: 0; 
+        padding: 20px; 
+        text-align: center;
+    }
+
+    .card { 
+        background: white; 
+        padding: 40px 30px; 
+        border-radius: 24px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        width: 100%; 
+        max-width: 350px; 
+    }
+
+    .icon-sad { 
+        font-size: 60px; 
+        margin-bottom: 20px; 
+        display: block; 
+    }
+
+    h1 { 
+        color: var(--color-text); 
+        margin: 0 0 10px 0; 
+        font-size: 24px; 
+    }
+
+    p { 
+        color: #888; 
+        font-size: 16px; 
+        margin-bottom: 30px; 
+        line-height: 1.5; 
+    }
+
+    button { 
+        background: var(--color-primary); 
+        color: white; 
+        border: none; 
+        padding: 15px 30px; 
+        font-size: 16px; 
+        border-radius: 50px; 
+        cursor: pointer; 
+        width: 100%; 
+        font-weight: 600; 
+        transition: 0.3s; 
+    }
+
+    button:hover { 
+        background-color: #006f2c; 
+        transform: translateY(-2px); 
+    }
+</style>
+
+</body>
+</html>

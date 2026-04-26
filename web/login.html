@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharenergy - Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="card">
+        <h1>¡Hola! 👋</h1>
+        <p>Introduce tu número para desbloquear la batería.</p>
+
+        <input type="tel" id="telefono" placeholder="600 123 456" autofocus>
+        
+        <button onclick="registrar()">CONTINUAR →</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const idSesion = params.get('session');
+
+        async function registrar() {
+            const tel = document.getElementById("telefono").value;
+            if(tel.length < 9) { alert("Número inválido"); return; }
+
+            // 1. Guardamos el teléfono
+            await fetch(`/api/registro?u=${idSesion}&tel=${tel}`);
+
+            // 2. Intentamos alquilar
+            try {
+                let resp = await fetch('/api/alquilar?u=' + idSesion);
+                let texto = await resp.text();
+
+                if(texto.startsWith("OK")) {
+                
+                    window.location.href = "using.html?session=" + idSesion;
+                } 
+          
+                else if (texto.includes("No hay baterías") || texto.includes("cargando")) {
+                  
+                    window.location.href = "unavailable.html";
+                } 
+                else {
+                 
+                    alert(texto); 
+                }
+            } catch (e) {
+                alert("Error de conexión");
+            }
+        }
+    </script>
+    <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f4f7f6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .card {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 350px;
+        text-align: center;
+    }
+
+    h1 {
+        color: #008f39;
+        margin-bottom: 5px;
+    }
+
+    p {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    input {
+        width: 90%;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 18px;
+        text-align: center;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: #008f39;
+    }
+
+    button {
+        background: #FFD700;
+        color: #2D3E50;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 50px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        background: #e6c200;
+    }
+</style>
+
+</body>
+</html>

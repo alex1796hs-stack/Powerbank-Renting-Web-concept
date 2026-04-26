@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharenergy - En Uso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+   
+</head>
+<body>
+
+    <div class="card-container">
+        <h1>¡Conectado!</h1>
+        <p style="color: #7F8C8D;">Disfruta de tu energía ilimitada.</p>
+
+        <div class="icono-wrapper">
+            <div class="icono-bateria">⚡</div>
+        </div>
+        
+        <div id="cronometro">00:00</div>
+
+        <button class="btn-devolver" onclick="devolverPowerbank()">
+            <span class="btn-icon">🛑</span> Finalizar y Devolver
+        </button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const idSesion = params.get('session');
+
+        // Cronómetro visual
+        let segundos = 0;
+        setInterval(() => {
+            segundos++;
+            let min = Math.floor(segundos / 60).toString().padStart(2, '0');
+            let sec = (segundos % 60).toString().padStart(2, '0');
+            document.getElementById("cronometro").innerText = `${min}:${sec}`;
+        }, 1000);
+
+
+        async function devolverPowerbank() {
+            try {
+               
+                let respuesta = await fetch('/api/devolver?u=' + idSesion);
+                let texto = await respuesta.text();
+
+                if (!texto.includes("ERROR")) {
+                  
+                    let mensajeCodificado = encodeURIComponent(texto);
+       
+                    window.location.href = "payment.html?data=" + mensajeCodificado;
+                    
+         
+                } else {
+                    alert("Error: " + texto);
+                }
+            } catch (e) {
+                alert("Error de conexión");
+            }
+        }
+    </script>
+     <style>
+    :root {
+        --color-primary: #008f39;
+        --color-dark-green: #005f26;
+        --color-accent: #FFD700;
+        --color-text: #2D3E50;
+        --radius-card: 24px;
+        --radius-btn: 50px;
+    }
+
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background: linear-gradient(135deg, #e6f5ea 0%, #f4f7f6 100%);
+        margin: 0; 
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh; 
+        color: var(--color-text);
+    }
+
+    .card-container {
+        background: white; 
+        padding: 50px 30px;
+        border-radius: var(--radius-card);
+        box-shadow: 0 15px 40px rgba(0, 143, 57, 0.15);
+        text-align: center; 
+        width: 100%; 
+        max-width: 400px;
+        position: relative; 
+        overflow: hidden;
+    }
+
+    .icono-wrapper {
+        display: inline-block; 
+        padding: 20px;
+        background-color: rgba(0, 143, 57, 0.1);
+        border-radius: 50%; 
+        margin-bottom: 20px;
+    }
+
+    .icono-bateria { 
+        font-size: 60px; 
+        animation: pulso 2s infinite ease-in-out; 
+    }
+
+    @keyframes pulso {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    #cronometro {
+        font-size: 56px; 
+        font-weight: 700; 
+        color: var(--color-primary);
+        margin: 10px 0 30px 0; 
+        font-variant-numeric: tabular-nums; 
+        letter-spacing: -2px;
+    }
+
+    .btn-devolver {
+        background-color: var(--color-dark-green); 
+        color: white;
+        border: none; 
+        padding: 18px 40px; 
+        font-size: 18px; 
+        font-weight: 600;
+        border-radius: var(--radius-btn); 
+        cursor: pointer; 
+        width: 100%;
+        transition: all 0.3s ease; 
+        box-shadow: 0 8px 20px rgba(0, 95, 38, 0.3);
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+    }
+
+    .btn-devolver:hover { 
+        transform: translateY(-3px); 
+        background-color: #004d1f; 
+    }
+
+    .btn-icon { 
+        margin-right: 10px; 
+        font-size: 22px; 
+    }
+</style>
+
+</body>
+</html>

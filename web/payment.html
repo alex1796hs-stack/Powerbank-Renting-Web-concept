@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharenergy - Pago</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="card">
+        <h1>Resumen de uso</h1>
+        <p style="color:#666; font-size: 14px; margin-top:0;">Revisa los detalles antes de pagar</p>
+        
+        <hr>
+
+        <div class="row">
+            <span class="label">Batería</span>
+            <span class="value" id="pb-name">...</span>
+        </div>
+
+        <div class="row">
+            <span class="label">Tiempo Total</span>
+            <span class="value" id="pb-time">...</span>
+        </div>
+        
+        <div class="row">
+            <span class="label">Tarifa</span>
+            <span class="value" style="font-size: 14px;">0.50€ fijos + 0.02€/min</span>
+        </div>
+
+        <div class="total-box">
+            <span class="total-label">Total a Pagar</span>
+            <p class="total-price" id="pb-price">0.00 €</p>
+        </div>
+
+        <button onclick="pagar()">💳 Confirmar Pago</button>
+    </div>
+
+    <script>
+        // Leemos los datos que nos pasó Java a través de la URL
+        const params = new URLSearchParams(window.location.search);
+        
+        // Decodificamos los caracteres especiales
+        const dataRaw = decodeURIComponent(params.get('data')); 
+        
+        if(dataRaw && dataRaw !== "null") {
+            // Java nos envió: ID | TIEMPO | PRECIO
+            const partes = dataRaw.split("|"); 
+            
+            if(partes.length >= 3) {
+                document.getElementById("pb-name").innerText = partes[0];
+                document.getElementById("pb-time").innerText = partes[1];
+                document.getElementById("pb-price").innerText = partes[2];
+            }
+        } else {
+            document.querySelector(".card").innerHTML = "<h2>Error: No hay datos de pago</h2><button onclick='location.href=\"index.html\"'>Volver</button>";
+        }
+
+        function pagar() {
+            window.location.href = "summary.html";
+        }
+    </script>
+
+    <style>
+    :root {
+        --color-primary: #008f39;
+        --color-text: #2D3E50;
+        --color-bg: #F4F7F6;
+    }
+
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background: var(--color-bg); 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        min-height: 100vh; 
+        margin: 0; 
+        padding: 20px;
+    }
+
+    .card { 
+        background: white; 
+        padding: 40px; 
+        border-radius: 24px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        width: 100%; 
+        max-width: 350px; 
+        text-align: center; 
+    }
+
+    h1 { 
+        color: var(--color-primary); 
+        margin-bottom: 5px; 
+        font-size: 24px; 
+    }
+
+    hr { 
+        border: 0; 
+        border-top: 1px solid #eee; 
+        margin: 25px 0; 
+    }
+
+    .row { 
+        display: flex; 
+        justify-content: space-between; 
+        margin-bottom: 15px; 
+    }
+
+    .label { 
+        color: #888; 
+        font-size: 14px; 
+        font-weight: 600; 
+    }
+
+    .value { 
+        font-size: 16px; 
+        font-weight: 700; 
+        color: var(--color-text); 
+    }
+
+    .total-box { 
+        background: #e8f5e9; 
+        padding: 20px; 
+        border-radius: 15px; 
+        margin-top: 20px; 
+        margin-bottom: 30px; 
+    }
+
+    .total-label { 
+        color: var(--color-primary); 
+        font-size: 14px; 
+        font-weight: 600; 
+        text-transform: uppercase; 
+        margin-bottom: 5px; 
+        display: block;
+    }
+
+    .total-price { 
+        font-size: 36px; 
+        color: var(--color-primary); 
+        margin: 0; 
+        font-weight: 700; 
+        line-height: 1;
+    }
+
+    button { 
+        background: var(--color-text); 
+        color: white; 
+        border: none; 
+        padding: 15px 30px; 
+        font-size: 18px; 
+        border-radius: 50px; 
+        cursor: pointer; 
+        width: 100%; 
+        font-weight: 600; 
+        transition: 0.3s; 
+        box-shadow: 0 5px 15px rgba(45, 62, 80, 0.3);
+    }
+
+    button:hover { 
+        transform: scale(1.02); 
+        background: #1a252f; 
+    }
+</style>
+
+</body>
+</html>
