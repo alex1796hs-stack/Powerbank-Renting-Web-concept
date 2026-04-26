@@ -5,165 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharenergy - Pago</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .total-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            padding: 24px;
+            border-radius: var(--radius);
+            margin: 24px 0;
+            border: 1px solid var(--primary-glow);
+        }
+        .total-price {
+            font-size: 42px;
+            color: var(--primary);
+            font-weight: 700;
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+    </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Resumen de uso</h1>
-        <p style="color:#666; font-size: 14px; margin-top:0;">Revisa los detalles antes de pagar</p>
-        
-        <hr>
+    <header class="header">
+        <a href="index.html" class="logo-link">
+            <img src="IMG/logo_premium.png" alt="Sharenergy Logo" class="logo-img">
+            <span class="brand-name">Sharenergy</span>
+        </a>
+    </header>
 
-        <div class="row">
-            <span class="label">Batería</span>
-            <span class="value" id="pb-name">...</span>
-        </div>
+    <main class="main-container">
+        <div class="card">
+            <h1>Resumen de uso</h1>
+            <p class="subtitle">Revisa los detalles de tu sesión antes de confirmar el pago.</p>
+            
+            <div class="row">
+                <span style="color: var(--text-dim)">Powerbank</span>
+                <span id="pb-name" style="font-weight: 700;">...</span>
+            </div>
 
-        <div class="row">
-            <span class="label">Tiempo Total</span>
-            <span class="value" id="pb-time">...</span>
-        </div>
-        
-        <div class="row">
-            <span class="label">Tarifa</span>
-            <span class="value" style="font-size: 14px;">0.50€ fijos + 0.02€/min</span>
-        </div>
+            <div class="row">
+                <span style="color: var(--text-dim)">Tiempo</span>
+                <span id="pb-time" style="font-weight: 700;">...</span>
+            </div>
+            
+            <div class="row">
+                <span style="color: var(--text-dim)">Tarifa base</span>
+                <span style="font-weight: 700;">0.50 €</span>
+            </div>
 
-        <div class="total-box">
-            <span class="total-label">Total a Pagar</span>
-            <p class="total-price" id="pb-price">0.00 €</p>
-        </div>
+            <div class="total-box">
+                <span style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);">Total a Pagar</span>
+                <div class="total-price" id="pb-price">0.00 €</div>
+            </div>
 
-        <button onclick="pagar()">💳 Confirmar Pago</button>
-    </div>
+            <button class="btn" onclick="pagar()">💳 Confirmar Pago</button>
+            <p style="margin-top: 15px; font-size: 12px; color: var(--text-dim);">Pago seguro procesado por Sharenergy</p>
+        </div>
+    </main>
 
     <script>
-
         const params = new URLSearchParams(window.location.search);
-        
-
         const dataRaw = decodeURIComponent(params.get('data')); 
         
         if(dataRaw && dataRaw !== "null") {
             const partes = dataRaw.split("|"); 
-            
             if(partes.length >= 3) {
                 document.getElementById("pb-name").innerText = partes[0];
                 document.getElementById("pb-time").innerText = partes[1];
                 document.getElementById("pb-price").innerText = partes[2];
             }
         } else {
-            document.querySelector(".card").innerHTML = "<h2>Error: No hay datos de pago</h2><button onclick='location.href=\"index.html\"'>Volver</button>";
+            document.querySelector(".card").innerHTML = "<h1>Error</h1><p>No se han encontrado datos de la sesión.</p><button class='btn' onclick='location.href=\"index.html\"'>Volver</button>";
         }
 
         function pagar() {
+            // Aquí iría la integración con Stripe o pasarela de pago real
             window.location.href = "summary.html";
         }
     </script>
-
-    <style>
-    :root {
-        --color-primary: #008f39;
-        --color-text: #2D3E50;
-        --color-bg: #F4F7F6;
-    }
-
-    body { 
-        font-family: 'Poppins', sans-serif; 
-        background: var(--color-bg); 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        min-height: 100vh; 
-        margin: 0; 
-        padding: 20px;
-    }
-
-    .card { 
-        background: white; 
-        padding: 40px; 
-        border-radius: 24px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-        width: 100%; 
-        max-width: 350px; 
-        text-align: center; 
-    }
-
-    h1 { 
-        color: var(--color-primary); 
-        margin-bottom: 5px; 
-        font-size: 24px; 
-    }
-
-    hr { 
-        border: 0; 
-        border-top: 1px solid #eee; 
-        margin: 25px 0; 
-    }
-
-    .row { 
-        display: flex; 
-        justify-content: space-between; 
-        margin-bottom: 15px; 
-    }
-
-    .label { 
-        color: #888; 
-        font-size: 14px; 
-        font-weight: 600; 
-    }
-
-    .value { 
-        font-size: 16px; 
-        font-weight: 700; 
-        color: var(--color-text); 
-    }
-
-    .total-box { 
-        background: #e8f5e9; 
-        padding: 20px; 
-        border-radius: 15px; 
-        margin-top: 20px; 
-        margin-bottom: 30px; 
-    }
-
-    .total-label { 
-        color: var(--color-primary); 
-        font-size: 14px; 
-        font-weight: 600; 
-        text-transform: uppercase; 
-        margin-bottom: 5px; 
-        display: block;
-    }
-
-    .total-price { 
-        font-size: 36px; 
-        color: var(--color-primary); 
-        margin: 0; 
-        font-weight: 700; 
-        line-height: 1;
-    }
-
-    button { 
-        background: var(--color-text); 
-        color: white; 
-        border: none; 
-        padding: 15px 30px; 
-        font-size: 18px; 
-        border-radius: 50px; 
-        cursor: pointer; 
-        width: 100%; 
-        font-weight: 600; 
-        transition: 0.3s; 
-        box-shadow: 0 5px 15px rgba(45, 62, 80, 0.3);
-    }
-
-    button:hover { 
-        transform: scale(1.02); 
-        background: #1a252f; 
-    }
-</style>
-
 </body>
 </html>

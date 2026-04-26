@@ -4,18 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharenergy - Registro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        input {
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <div class="card">
-        <h1>¡Hola! 👋</h1>
-        <p>Introduce tu número para desbloquear la batería.</p>
 
-        <input type="tel" id="telefono" placeholder="600 123 456" autofocus>
-        
-        <button onclick="registrar()">CONTINUAR →</button>
-    </div>
+    <header class="header">
+        <a href="index.html" class="logo-link">
+            <img src="IMG/logo_premium.png" alt="Sharenergy Logo" class="logo-img">
+            <span class="brand-name">Sharenergy</span>
+        </a>
+    </header>
+
+    <main class="main-container">
+        <div class="card">
+            <div style="font-size: 48px; margin-bottom: 20px;">⚡</div>
+            <h1>¡Hola! 👋</h1>
+            <p class="subtitle">Introduce tu número de teléfono para comenzar tu alquiler.</p>
+
+            <input type="tel" id="telefono" placeholder="600 123 456" autofocus>
+            
+            <button class="btn" onclick="registrar()">CONTINUAR →</button>
+            <button class="btn btn-outline" onclick="history.back()">Cancelar</button>
+        </div>
+    </main>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -24,83 +56,19 @@
         async function registrar() {
             const tel = document.getElementById("telefono").value;
             
-            // Validación
-            if(tel.length < 9) { alert("Número inválido"); return; }
+            if(tel.length < 9) { 
+                alert("Por favor, introduce un número de teléfono válido."); 
+                return; 
+            }
 
-            // 1. Guardamos el teléfono en el servidor
-            await fetch(`/api/registro?u=${idSesion}&tel=${tel}`);
-
-            window.location.href = "select.html?session=" + idSesion;
+            try {
+                // Guardamos el teléfono en el servidor (Persistente ahora)
+                await fetch(`/api/registro?u=${idSesion}&tel=${tel}`);
+                window.location.href = "select.html?session=" + idSesion;
+            } catch (e) {
+                alert("Error de conexión");
+            }
         }
-         
     </script>
-    <style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: #f4f7f6;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .card {
-        background: white;
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 350px;
-        text-align: center;
-    }
-
-    h1 {
-        color: #008f39;
-        margin-bottom: 5px;
-    }
-
-    p {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 30px;
-    }
-
-    input {
-        width: 90%;
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-        font-size: 18px;
-        text-align: center;
-        outline: none;
-        transition: 0.3s;
-    }
-
-    input:focus {
-        border-color: #008f39;
-    }
-
-    button {
-        background: #FFD700;
-        color: #2D3E50;
-        border: none;
-        padding: 15px 30px;
-        font-size: 18px;
-        border-radius: 50px;
-        cursor: pointer;
-        width: 100%;
-        font-weight: 700;
-        transition: 0.3s;
-    }
-
-    button:hover {
-        transform: scale(1.05);
-        background: #e6c200;
-    }
-</style>
-
 </body>
 </html>

@@ -1,8 +1,12 @@
+package com.sharenergy;
+
 public class Powerbank {
     private String id;
     private boolean alquilada;
     private boolean cargando; 
     private int nivelCarga;
+
+    public Powerbank() {}
 
     public Powerbank(String id) {
         this.id = id;
