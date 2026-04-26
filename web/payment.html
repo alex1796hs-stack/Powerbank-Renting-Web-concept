@@ -38,14 +38,13 @@
     </div>
 
     <script>
-        // Leemos los datos que nos pasó Java a través de la URL
+
         const params = new URLSearchParams(window.location.search);
         
-        // Decodificamos los caracteres especiales
+
         const dataRaw = decodeURIComponent(params.get('data')); 
         
         if(dataRaw && dataRaw !== "null") {
-            // Java nos envió: ID | TIEMPO | PRECIO
             const partes = dataRaw.split("|"); 
             
             if(partes.length >= 3) {

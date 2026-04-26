@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elige tu Batería</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <h1>Elige tu energía ⚡</h1>
+    <p>Selecciona una Powerbank disponible para desbloquearla.</p>
+
+    <div id="contenedor-baterias" class="grid-baterias">
+        <p>Cargando inventario...</p>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const idSesion = params.get('session');
+
+        // 1. Pedimos la lista de baterías al servidor
+        fetch('/api/lista-baterias')
+            .then(res => res.json())
+            .then(baterias => {
+                const contenedor = document.getElementById("contenedor-baterias");
+                contenedor.innerHTML = ""; // Limpiamos "Cargando..."
+
+                baterias.forEach(pb => {
+                    let estadoTexto = pb.disponible ? "DISPONIBLE" : "OCUPADA";
+                    let claseExtra = pb.disponible ? "" : "ocupada";
+
+                    let html = `
+                        <div class="card-bateria ${claseExtra}" onclick="seleccionar('${pb.id}')">
+                            <img src="IMG/logo_img.png" class="bateria-img"> 
+                            <span class="nombre">${pb.id}</span>
+                            <span class="estado">${estadoTexto}</span>
+                        </div>
+                    `;
+                    contenedor.innerHTML += html;
+                });
+            });
+
+        // 2. Al hacer click, alquilamos esa batería específica
+        async function seleccionar(idBateria) {
+            try {
+                let resp = await fetch(`/api/alquilar?u=${idSesion}&b=${idBateria}`);
+                let texto = await resp.text();
+
+                if (texto.startsWith("OK")) {
+                    window.location.href = "using.html?session=" + idSesion;
+                } else {
+                    alert(texto);
+                }
+            } catch (e) {
+                alert("Error de conexión");
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F4F7F6;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #008f39;
+        }
+
+        .grid-baterias {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card-bateria {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 160px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .card-bateria:hover {
+            transform: translateY(-5px);
+            border-color: #008f39;
+        }
+
+        .bateria-img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .nombre {
+            font-weight: 700;
+            color: #2D3E50;
+            display: block;
+        }
+
+        .estado {
+            font-size: 12px;
+            color: #008f39;
+            font-weight: 600;
+            background: #e6f5ea;
+            padding: 4px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .ocupada {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(1);
+}

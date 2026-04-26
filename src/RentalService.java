@@ -42,6 +42,42 @@ public class RentalService {
         return "ERROR: No hay baterías disponibles (Todas están en uso o cargando).";
     }
 
+    public String obtenerListaJson() {
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < inventario.size(); i++) {
+            Powerbank pb = inventario.get(i);
+            // Está disponible si NO está alquilada Y NO está cargando
+            boolean disponible = !pb.isAlquilada() && !pb.isCargando();
+            
+            json.append(String.format("{\"id\":\"%s\", \"disponible\":%b}", pb.getId(), disponible));
+            
+            if (i < inventario.size() - 1) json.append(","); // Coma separadora
+        }
+        json.append("]");
+        return json.toString();
+    }
+
+    public String iniciarAlquilerEspecifico(String sessionId, String batteryId) {
+        if (alquileresActivos.containsKey(sessionId)) return "ERROR: Ya tienes un alquiler activo.";
+
+        for (Powerbank pb : inventario) {
+            // Buscamos la batería que coincida con el ID
+            if (pb.getId().equals(batteryId)) {
+                if (!pb.isAlquilada() && !pb.isCargando()) {
+                    
+                    pb.setAlquilada(true);
+                    alquileresActivos.put(sessionId, pb);
+                    tiemposInicio.put(sessionId, System.currentTimeMillis());
+                    
+                    System.out.println("🔋 Alquiler ESPECÍFICO: " + batteryId);
+                    return "OK|" + pb.getId();
+                } else {
+                    return "ERROR: Esa batería ya no está disponible (alguien se adelantó).";
+                }
+            }
+        }
+        return "ERROR: Batería no encontrada.";
+    }
     public String finalizarAlquiler(String sessionId) {
         if (!alquileresActivos.containsKey(sessionId)) return "ERROR: No tienes alquiler.";
         if (!tiemposInicio.containsKey(sessionId)) return "ERROR: Tiempo no encontrado.";

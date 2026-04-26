@@ -15,33 +15,45 @@ public class Main {
 
         //CONEXIONES 
 
-        //Endpoint para GUARDAR el teléfono
+        //Entregar la lista de baterías en formato JSON
+        app.get("/api/lista-baterias", ctx -> {
+            String json = servicio.obtenerListaJson();
+            ctx.contentType("application/json").result(json);
+        });
+
+        // 2. Registro
         app.get("/api/registro", ctx -> {
             String idSesion = ctx.queryParam("u");
             String telefono = ctx.queryParam("tel");
-            
             if(idSesion != null && telefono != null) {
                 servicio.registrarUsuario(idSesion, telefono);
                 ctx.result("OK");
-            } else {
-                ctx.result("ERROR: Faltan datos");
-            }
+            } else { ctx.result("ERROR"); }
         });
 
-        //Alquilar
+        // 3. Alquiler 
         app.get("/api/alquilar", ctx -> {
             String idSesion = ctx.queryParam("u");
-            String respuesta = servicio.iniciarAlquiler(idSesion);
+            String idBateria = ctx.queryParam("b"); 
+            
+            String respuesta;
+            if (idBateria != null) {
+            
+                respuesta = servicio.iniciarAlquilerEspecifico(idSesion, idBateria);
+            } else {
+                
+                respuesta = servicio.iniciarAlquiler(idSesion);
+            }
             ctx.result(respuesta);
         });
 
-        //Devolver
+        // 4. Devolver 
         app.get("/api/devolver", ctx -> {
             String idSesion = ctx.queryParam("u");
-            String respuesta = servicio.finalizarAlquiler(idSesion);
-            ctx.result(respuesta);
+            ctx.result(servicio.finalizarAlquiler(idSesion));
         });
         
-        app.get("/api/estado", ctx -> ctx.result(servicio.obtenerEstadoInventario()));
+        // 5. Estado HTML 
+        app.get("/api/estado", ctx -> ctx.html(servicio.obtenerEstadoInventario()));
     }
 }

@@ -23,33 +23,16 @@
 
         async function registrar() {
             const tel = document.getElementById("telefono").value;
+            
+            // Validación
             if(tel.length < 9) { alert("Número inválido"); return; }
 
-            // 1. Guardamos el teléfono
+            // 1. Guardamos el teléfono en el servidor
             await fetch(`/api/registro?u=${idSesion}&tel=${tel}`);
 
-            // 2. Intentamos alquilar
-            try {
-                let resp = await fetch('/api/alquilar?u=' + idSesion);
-                let texto = await resp.text();
-
-                if(texto.startsWith("OK")) {
-                
-                    window.location.href = "using.html?session=" + idSesion;
-                } 
-          
-                else if (texto.includes("No hay baterías") || texto.includes("cargando")) {
-                  
-                    window.location.href = "unavailable.html";
-                } 
-                else {
-                 
-                    alert(texto); 
-                }
-            } catch (e) {
-                alert("Error de conexión");
-            }
+            window.location.href = "select.html?session=" + idSesion;
         }
+         
     </script>
     <style>
     body {
