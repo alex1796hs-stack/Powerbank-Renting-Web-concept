@@ -1,0 +1,7 @@
+com\sharenergy\config\DatabaseConfig.class
+com\sharenergy\repository\RentalRepository.class
+com\sharenergy\RentalService.class
+com\sharenergy\repository\PowerbankRepository.class
+com\sharenergy\Powerbank.class
+com\sharenergy\Main.class
+com\sharenergy\repository\UserRepository.class
